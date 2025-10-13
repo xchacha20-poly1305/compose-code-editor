@@ -1,32 +1,32 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("multiplatform")
-    id("maven-publish")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.compose")
-    id("com.android.library")
-    id("org.jetbrains.dokka")
+    id("com.android.kotlin.multiplatform.library")
 }
 
 group = "com.wakaztahir"
 version = findProperty("version") as String
+val composeVersion = providers.gradleProperty("compose.version").orElse("1.10.1").get()
 
 kotlin {
-    androidTarget {
-        publishLibraryVariants("release")
+    androidLibrary {
+        namespace = "com.wakaztahir.codeeditor"
+        compileSdk = 36
+        minSdk = 23
     }
     jvm("desktop") {
-        compilations.all {
-            kotlinOptions.jvmTarget = "17"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
         }
-    }
-    js(IR) {
-        browser()
-        binaries.executable()
     }
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(compose.runtime)
-                api(compose.foundation)
+                api("org.jetbrains.compose.runtime:runtime:$composeVersion")
+                api("org.jetbrains.compose.foundation:foundation:$composeVersion")
             }
         }
         val commonTest by getting {
@@ -46,29 +46,9 @@ kotlin {
 //        }
         val desktopMain by getting {
             dependencies {
-                api(compose.preview)
+                api("org.jetbrains.compose.ui:ui-tooling-preview:$composeVersion")
             }
         }
         val desktopTest by getting
-
-        named("jsMain") {
-            dependencies {
-                api(compose.web.core)
-            }
-        }
     }
-}
-
-android {
-    compileSdk = 34
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 21
-        targetSdk = 33
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    namespace = "com.wakaztahir.codeeditor"
 }
