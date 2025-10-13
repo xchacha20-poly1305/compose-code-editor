@@ -1,74 +1,43 @@
 plugins {
-    kotlin("multiplatform")
-    id("maven-publish")
-    id("org.jetbrains.compose")
     id("com.android.library")
-    id("org.jetbrains.dokka")
+    id("kotlin-android")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.2.20"
 }
 
 group = "com.wakaztahir"
-version = findProperty("version") as String
+version = "3.1.3"
 
-kotlin {
-    androidTarget {
-        publishLibraryVariants("release")
-    }
-    jvm("desktop") {
-        compilations.all {
-            kotlinOptions.jvmTarget = "17"
-        }
-    }
-    js(IR) {
-        browser()
-        binaries.executable()
-    }
-    sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(compose.runtime)
-                api(compose.foundation)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-        val androidMain by getting {
-            dependencies {
+android {
+    namespace = "com.wakaztahir.codeeditor"
+    compileSdk = 36
 
-            }
-        }
-//        val androidTest by getting {
-//            dependencies {
-//                implementation("junit:junit:4.13.2")
-//            }
-//        }
-        val desktopMain by getting {
-            dependencies {
-                api(compose.preview)
-            }
-        }
-        val desktopTest by getting
+    defaultConfig {
+        minSdk = 23
+        consumerProguardFiles("consumer-rules.pro")
+    }
 
-        named("jsMain") {
-            dependencies {
-                api(compose.web.core)
-            }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
         }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+    kotlinOptions {
+        jvmTarget = "21"
+    }
+    buildFeatures {
+        compose = true
     }
 }
 
-android {
-    compileSdk = 34
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 21
-        targetSdk = 33
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    namespace = "com.wakaztahir.codeeditor"
+dependencies {
+    implementation(platform("androidx.compose:compose-bom:2025.06.00"))
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
 }
