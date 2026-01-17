@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.20"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.3.0"
 }
 
 group = "com.wakaztahir"
@@ -26,16 +25,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2025.06.00"))
+    implementation(platform("androidx.compose:compose-bom:2026.01.00"))
     implementation("androidx.compose.runtime:runtime")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.ui:ui-tooling-preview")
