@@ -12,7 +12,6 @@ pluginManagement {
         id("com.android.application").version(extra["agp.version"] as String)
         id("com.android.library").version(extra["agp.version"] as String)
         id("org.jetbrains.compose").version(extra["compose.version"] as String)
-        id("org.jetbrains.dokka").version("1.7.20")
     }
 }
 rootProject.name = "ComposeCodeEditor"
