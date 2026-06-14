@@ -1,3 +1,4 @@
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -9,12 +10,16 @@ plugins {
 
 group = "com.wakaztahir"
 version = findProperty("version") as String
-val composeVersion = providers.gradleProperty("compose.version").orElse("1.10.1").get()
+val composeVersion = extensions.getByType<VersionCatalogsExtension>()
+    .named("libs")
+    .findVersion("composeMultiplatform")
+    .map { it.requiredVersion }
+    .orElse(providers.gradleProperty("compose.version").orElse("1.11.1").get())
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.wakaztahir.codeeditor"
-        compileSdk = 36
+        compileSdk = 37
         minSdk = 23
     }
     jvm("desktop") {
