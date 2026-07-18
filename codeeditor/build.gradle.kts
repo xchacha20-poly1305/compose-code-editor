@@ -19,6 +19,7 @@ val composeVersion = extensions.getByType<VersionCatalogsExtension>()
 kotlin {
     android {
         namespace = "com.wakaztahir.codeeditor"
+        buildToolsVersion = "37.0.0"
         compileSdk = 37
         minSdk = 23
     }
@@ -28,18 +29,18 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting {
+        val commonMain = getByName("commonMain") {
             dependencies {
                 api("org.jetbrains.compose.runtime:runtime:$composeVersion")
                 api("org.jetbrains.compose.foundation:foundation:$composeVersion")
             }
         }
-        val commonTest by getting {
+        val commonTest = getByName("commonTest") {
             dependencies {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting {
+        val androidMain = getByName("androidMain") {
             dependencies {
 
             }
@@ -49,11 +50,11 @@ kotlin {
 //                implementation("junit:junit:4.13.2")
 //            }
 //        }
-        val desktopMain by getting {
+        val desktopMain = getByName("desktopMain") {
             dependencies {
                 api("org.jetbrains.compose.ui:ui-tooling-preview:$composeVersion")
             }
         }
-        val desktopTest by getting
+        val desktopTest = getByName("desktopTest")
     }
 }
